@@ -21,18 +21,20 @@ function run(argv) {
     });
   });
 
-  console.log("Safari Facts");
-  console.log("------");
-  console.log("Windows:", app.windows().length);
-  console.log("Total tabs:", total);
-  console.log("Active tabs:", active);
-  console.log("Distinct URLs:", urls.size);
-  console.log();
+  let urlsOut = "";
   if (argv == "list") {
     urls = Array.from(urls).sort();
-    urls.forEach((url, i) => {
-      console.log(`${i}. ${names[url]}
-    - ${url}`);
-    });
+    urlsOut = urls
+      .map((url, i) => `${i}. ${names[url]}\n\t- ${url}`)
+      .join("\n");
   }
+
+  return `Safari Facts
+------
+Windows: ${app.windows().length}
+Total tabs: ${total}
+Active tabs: ${active}
+Distinct URLs: ${urls.size||urls.length}
+
+${urlsOut}`;
 }
