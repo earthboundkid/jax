@@ -1,5 +1,16 @@
 #!/usr/bin/env osascript -l JavaScript
 
+function print() {
+  ObjC.import("Foundation");
+  for (let argument of arguments) {
+    $.NSFileHandle.fileHandleWithStandardOutput.writeData(
+      $.NSString.alloc
+        .initWithString(String(argument) + "\n")
+        .dataUsingEncoding($.NSNEXTSTEPStringEncoding)
+    );
+  }
+}
+
 function run(argv) {
   let app = Application("Safari");
   app.includeStandardAdditions = true;
@@ -21,20 +32,19 @@ function run(argv) {
     });
   });
 
-  let urlsOut = "";
-  if (argv == "list") {
-    urls = Array.from(urls).sort();
-    urlsOut = urls
-      .map((url, i) => `${i}. ${names[url]}\n\t- ${url}`)
-      .join("\n");
-  }
-
-  return `Safari Facts
+  print(`Safari Facts
 ------
 Windows: ${app.windows().length}
 Total tabs: ${total}
 Active tabs: ${active}
-Distinct URLs: ${urls.size||urls.length}
+Distinct URLs: ${urls.size}
+`);
 
-${urlsOut}`;
+  if (String(argv) === "list") {
+    print();
+    urls = Array.from(urls).sort();
+    urls.forEach((url, i) => {
+      print(`${i}. ${names[url]}\n\t- ${url}`);
+    });
+  }
 }
