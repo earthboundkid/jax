@@ -44,7 +44,7 @@ Distinct URLs: ${urls.size}
     print();
     urls = Array.from(urls).sort();
     urls.forEach((url, i) => {
-      print(`${i}. ${names[url]}\n\t- ${url}`);
+      print(`${i+1}. ${names[url]}\n\t- ${url}`);
     });
   }
 }
